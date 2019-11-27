@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ParseService } from '../../services/parse.service';
+import { GeocoderService } from '../../services/geocoder.service';
 
 @Component({
   selector: 'app-home',
@@ -12,11 +13,17 @@ export class HomeComponent implements OnInit {
   libraries: any = [];
 
   constructor(
-    private parseService: ParseService
-  ) { }
+    private parseService: ParseService,
+    private geocoderService: GeocoderService
+  ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.init();
+  }
+
+  async init() {
     await this.getData();
+    await this.addLatLngs();
     console.log("Libraries: ", this.libraries);
   }
 
@@ -25,6 +32,10 @@ export class HomeComponent implements OnInit {
       this.libraries = await this.parseService.parseCSVToJSON("assets/data/kansas_libs.csv");
       resolve();
     })
+  }
+
+  addLatLngs() {
+    this.geocoderService.add(this.libraries);
   }
 
 }
