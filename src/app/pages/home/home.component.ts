@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ParseService } from '../../services/parse.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  libraries: any = [];
 
-  ngOnInit() {
+  constructor(
+    private parseService: ParseService
+  ) { }
+
+  async ngOnInit() {
+    await this.getData();
+    console.log("Libraries: ", this.libraries);
+  }
+
+  getData() {
+    return new Promise(async (resolve) => {
+      this.libraries = await this.parseService.parseCSVToJSON("assets/data/kansas_libs.csv");
+      resolve();
+    })
   }
 
 }
