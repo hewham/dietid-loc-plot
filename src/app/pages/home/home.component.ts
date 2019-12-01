@@ -9,8 +9,12 @@ import { GeocoderService } from '../../services/geocoder.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  title = 'My first AGM project';
+  lat = 38.5119;
+  lng = -98.4842;
 
   libraries: any = [];
+  temps: any;
 
   constructor(
     private parseService: ParseService,
@@ -35,7 +39,10 @@ export class HomeComponent implements OnInit {
   }
 
   addLatLngs() {
-    this.geocoderService.add(this.libraries);
+    return new Promise(async (resolve) => {
+      this.temps = await this.geocoderService.add(this.libraries);
+      resolve();
+    });
   }
 
 }

@@ -1,1 +1,5 @@
-<p>home works!</p>
+<div *ngIf="temps">
+  <agm-map [latitude]="lat" [longitude]="lng">
+    <agm-marker *ngFor="let loc of temps" [latitude]="loc.latitude" [longitude]="loc.longitude"></agm-marker>
+  </agm-map>
+</div>

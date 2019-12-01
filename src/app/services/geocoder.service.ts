@@ -1,70 +1,61 @@
 import { Injectable } from '@angular/core';
+import { HttpService } from './http.service';
 
-// declare var require: any;
-// var NodeGeocoder = require('node-geocoder');
-// var geocoderOptions = {
-//   provider: 'geocodio'
-// };
-
-// var geocoder = NodeGeocoder(geocoderOptions);
-
-declare const google;
+const MAPQUEST_BATCH_GEOCODE_URL = "http://open.mapquestapi.com/geocoding/v1/batch";
+const MAPQUEST_API_KEY = "a9H3grKAooGzDscrWWSzKmIdExvgHkMm";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeocoderService {
 
-  constructor() {}
+  constructor(
+    private httpService: HttpService
+  ) {}
 
-  async add(items) {
-    let loc = items[0].address + ", " + items[0].city;
-    console.log("Loc: ", loc);
-    let one = await this.geocode(loc);
-    console.log("GEOCODE: ", one);
+  add(items) {
+    // adds latitude and longitude to array of locations
+    return new Promise(async (resolve) => {
+      let chunks = this.chunkArray(items, 99);
+      let chunkedLocations = [];
+      for(let chunk of chunks) {
+        chunkedLocations.push(await this.batchGeocode(chunk))
+      }
+      resolve([].concat.apply([], chunkedLocations));
+    })
   }
 
-  // geocode(loc) {
-  //   return new Promise((resolve) => {
-  //     geocoder.geocode({
-  //       address:loc.address, 
-  //       city: loc.city, 
-  //       zipcode: loc.zipcode
-  //     }, (err, res) => {
-  //       resolve(res);
-  //     })
-  //   })
-  // }
-
-  geocode(loc){
-    //Get lat lng, detailed info from general location
-    return new Promise((resolve) => {
-      try{
-      // console.log("IN GOOGLE GEOCODER");
-       var geocoder = new google.maps.Geocoder();
-       var request = {
-         address: loc
-       };
-       geocoder.geocode(request, function(data, status) {
-         var location = <any>{};
-         // location = loc;
-         if (status == google.maps.GeocoderStatus.OK) {
-           if (data[0] != null) {
-             location.latitude = data[0].geometry.location.lat();
-             location.longitude = data[0].geometry.location.lng();
-             var components = data[0].address_components;
-             location.address = data[0].formatted_address;
-             resolve(location);
-           } else {
-             console.log("No address available");
-           }
-         }
-       });
-      }catch(err) {
-        throw new Error(err);
+  batchGeocode(locations) {
+    // uses mapquest batch geocoding service. Limit of 100 locations per request
+    return new Promise(async (resolve) => {
+      let url = MAPQUEST_BATCH_GEOCODE_URL + "?key=" + MAPQUEST_API_KEY;
+      for (let location of locations) {
+        // format spaces to be url friendly with "+"
+        location.addressFormatted = location.address.replace(/ /g,"+");
+        location.cityFormatted = location.city.replace(/ /g,"+");
+        let loc = location.addressFormatted + "," + location.cityFormatted + "," + location.state + "," + location.zip;
+        // append location to url request params
+        url = url + "&location=" + loc;
       }
-      });
-     }
+      let res:any = await this.httpService.get(url);
+      for(let i in res.results) {
+        locations[i].latitude = res.results[i].locations[0].latLng.lat;
+        locations[i].longitude = res.results[i].locations[0].latLng.lng;
+      }
+      resolve(locations);
+    })
+  }
+
+  chunkArray (array, length) {
+    // chunks an array into an array of arrays, with length limit for smaller arrays
+    let temp = [];
+    let i = 0;
+    let n = array.length;
+    while (i < n) {
+      temp.push(array.slice(i, i += length));
+    }
+    return temp;
+  }
 
 }
 
