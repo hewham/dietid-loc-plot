@@ -1,5 +1,29 @@
-<div *ngIf="temps">
+<div [hidden]="!isLoaded">
   <agm-map [latitude]="lat" [longitude]="lng">
-    <agm-marker *ngFor="let loc of temps" [latitude]="loc.latitude" [longitude]="loc.longitude"></agm-marker>
+    <agm-marker *ngFor="let loc of libraries" [latitude]="loc.latitude" [longitude]="loc.longitude"></agm-marker>
   </agm-map>
+
+  <!-- <div>
+    <div *ngFor="let lib of dataSource.data, let i = index">
+      <h4>{{ i + 1 }}) {{ lib.library }} ({{ lib.distance.toFixed(1) }} Miles Away)</h4>
+      <p>{{ lib.formattedAddress }}</p>
+    </div>
+  </div> -->
+
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="library">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Libraries</mat-header-cell>
+      <mat-cell *matCellDef="let library" (click)="onOpenLibrary(library)">{{ library.library }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let rows; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+  [length]="libraries.length"
+  [pageIndex]="0"
+  [pageSize]="10"
+  [pageSizeOptions]="[5,10,12,15,20,50]">
+  </mat-paginator>
 </div>

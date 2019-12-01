@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ViewChild, Component, OnInit } from '@angular/core';
+import { MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
 
 import { ParseService } from '../../services/parse.service';
 import { GeocoderService } from '../../services/geocoder.service';
+import { LocationService } from '../../services/location.service';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +11,12 @@ import { GeocoderService } from '../../services/geocoder.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+
+  dataSource = new MatTableDataSource<any>();
+  displayedColumns = [ 'library'];
+
   title = 'My first AGM project';
   lat = 38.5119;
   lng = -98.4842;
@@ -16,9 +24,12 @@ export class HomeComponent implements OnInit {
   libraries: any = [];
   temps: any;
 
+  isLoaded: boolean = false;
+
   constructor(
     private parseService: ParseService,
-    private geocoderService: GeocoderService
+    private geocoderService: GeocoderService,
+    private locationService: LocationService
   ) {}
 
   ngOnInit() {
@@ -28,7 +39,13 @@ export class HomeComponent implements OnInit {
   async init() {
     await this.getData();
     await this.addLatLngs();
+    this.findDistance();
+    this.sortByDistance();
+    this.formatAddresses();
     console.log("Libraries: ", this.libraries);
+    this.dataSource.data = this.libraries;
+    this.dataSource.paginator = this.paginator;
+    this.isLoaded = true;
   }
 
   getData() {
@@ -40,9 +57,36 @@ export class HomeComponent implements OnInit {
 
   addLatLngs() {
     return new Promise(async (resolve) => {
-      this.temps = await this.geocoderService.add(this.libraries);
+      this.libraries = await this.geocoderService.addLatLngs(this.libraries);
       resolve();
     });
+  }
+
+  findDistance() {
+    // calculate library distance from map center
+    for(let i in this.libraries) {
+      this.libraries[i].distance = this.locationService.findDistance(this.lat, this.lng, this.libraries[i].latitude, this.libraries[i].longitude);
+    }
+    return;
+  }
+
+  sortByDistance() {
+    // sort libraries by distance from map center
+    this.libraries.sort((a, b) => {
+      return a.distance - b.distance
+    });
+    return;
+  }
+
+  formatAddresses() {
+    for(let i in this.libraries) {
+      let ad = "";
+      this.libraries[i].address ? ad = ad + this.libraries[i].address + ", " : null ;
+      this.libraries[i].city ? ad = ad + this.libraries[i].city + " " : null ;
+      this.libraries[i].state ? ad = ad + this.libraries[i].state : null ;
+      this.libraries[i].zip ? ad = ad + ", " + this.libraries[i].zip : null ;
+      this.libraries[i].formattedAddress = ad;
+    }
   }
 
 }
