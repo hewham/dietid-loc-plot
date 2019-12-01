@@ -7,10 +7,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AgmCoreModule } from '@agm/core';
+import { CustomMaterialModule } from './core/material.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule } from '@angular/material'  
-import { MatPaginatorModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -20,10 +19,9 @@ import { MatPaginatorModule } from '@angular/material';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    CustomMaterialModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatTableModule,
-    MatPaginatorModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDUHueS0hNaKbcMy6INCTFWdI9q-CGYP7M'
     })

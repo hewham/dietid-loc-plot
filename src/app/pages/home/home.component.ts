@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   lng = -98.4842;
 
   libraries: any = [];
-  temps: any;
+  selectedLibrary: any = null;
 
   isLoaded: boolean = false;
 
@@ -42,7 +42,6 @@ export class HomeComponent implements OnInit {
     this.findDistance();
     this.sortByDistance();
     this.formatAddresses();
-    console.log("Libraries: ", this.libraries);
     this.dataSource.data = this.libraries;
     this.dataSource.paginator = this.paginator;
     this.isLoaded = true;
@@ -81,12 +80,18 @@ export class HomeComponent implements OnInit {
   formatAddresses() {
     for(let i in this.libraries) {
       let ad = "";
-      this.libraries[i].address ? ad = ad + this.libraries[i].address + ", " : null ;
-      this.libraries[i].city ? ad = ad + this.libraries[i].city + " " : null ;
-      this.libraries[i].state ? ad = ad + this.libraries[i].state : null ;
-      this.libraries[i].zip ? ad = ad + ", " + this.libraries[i].zip : null ;
+      this.libraries[i].address ? ad += this.libraries[i].address + ", " : null ;
+      this.libraries[i].city ? ad += this.libraries[i].city + " " : null ;
+      this.libraries[i].state ? ad += this.libraries[i].state : null ;
+      this.libraries[i].zip ? ad += ", " + this.libraries[i].zip : null ;
       this.libraries[i].formattedAddress = ad;
     }
+  }
+
+  onOpenLibrary(library) {
+    this.selectedLibrary = library;
+    this.lat = library.latitude;
+    this.lng = library.longitude;
   }
 
 }

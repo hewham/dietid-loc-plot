@@ -1,6 +1,27 @@
 <div [hidden]="!isLoaded">
-  <agm-map [latitude]="lat" [longitude]="lng">
-    <agm-marker *ngFor="let loc of libraries" [latitude]="loc.latitude" [longitude]="loc.longitude"></agm-marker>
+  <agm-map 
+    [latitude]="lat" 
+    [longitude]="lng">
+
+    <agm-marker 
+      *ngFor="let lib of libraries" 
+      [latitude]="lib.latitude" 
+      [longitude]="lib.longitude"
+      icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png">
+      <agm-info-window>
+          <mat-card>
+              <mat-card-title>
+                {{ lib.library }}
+              </mat-card-title>
+              <mat-card-subtitle>
+                {{ lib.distance.toFixed(1) }} Miles Away
+              </mat-card-subtitle>
+              <mat-card-content>
+                {{ lib.formattedAddress }}
+              </mat-card-content>
+            </mat-card>
+      </agm-info-window>
+    </agm-marker>
   </agm-map>
 
   <!-- <div>
@@ -9,21 +30,42 @@
       <p>{{ lib.formattedAddress }}</p>
     </div>
   </div> -->
+  <!-- <h4>Libraries</h4> -->
 
-  <mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="library">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Libraries</mat-header-cell>
-      <mat-cell *matCellDef="let library" (click)="onOpenLibrary(library)">{{ library.library }}</mat-cell>
-    </ng-container>
+  <div class="table-container">
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="library">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Libraries</mat-header-cell>
+        <mat-cell *matCellDef="let library" (click)="onOpenLibrary(library)">
+          <mat-icon style="color: cornflowerblue;">local_library</mat-icon>
+          &nbsp;{{ library.library }}
+        </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let rows; columns: displayedColumns;"></mat-row>
-  </mat-table>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let rows; columns: displayedColumns;"></mat-row>
+    </mat-table>
 
-  <mat-paginator #paginator
-  [length]="libraries.length"
-  [pageIndex]="0"
-  [pageSize]="10"
-  [pageSizeOptions]="[5,10,12,15,20,50]">
-  </mat-paginator>
+    <mat-paginator #paginator
+    [length]="libraries.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[10,15,30,50]">
+    </mat-paginator>
+  </div>
+
+  <div class="info-container" *ngIf="selectedLibrary">
+    <mat-card>
+      <mat-card-title>
+          {{ selectedLibrary.library }}
+      </mat-card-title>
+      <mat-card-subtitle>
+          {{ selectedLibrary.distance.toFixed(1) }} Miles Away
+      </mat-card-subtitle>
+      <mat-card-content>
+        {{ selectedLibrary.formattedAddress }}
+      </mat-card-content>
+    </mat-card>
+  </div>
+
 </div>

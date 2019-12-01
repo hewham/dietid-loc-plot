@@ -1,8 +1,33 @@
 agm-map {
-  height: 300px;
+  /* height: 300px; */
+  height: 40vh !important;
+}
+
+.table-container {
+  position: relative;
+  display: inline-block;
+  width: 35%;
+  height: 45vh !important;
+  margin: 20px;
+  padding-bottom: 35px;
 }
 
 mat-table {
-  width: 30%;
+  overflow: auto;
+  max-height: calc(45vh - 30px) !important;
+}
+
+mat-paginator {
+  height: 30px;
+  position: absolute;
+  bottom: -30px;
+  right: 0;
+}
+
+.info-container {
+  position: relative;
   display: inline-block;
+  width: 30%;
+  vertical-align:top;
+  margin: 70px 20px 0 20px;
 }
