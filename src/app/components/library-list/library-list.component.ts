@@ -1,5 +1,5 @@
 import { ViewChild, Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
+import { MatTableDataSource, MatPaginator} from '@angular/material';
 
 @Component({
   selector: 'app-library-list',
@@ -24,7 +24,7 @@ export class LibraryListComponent implements OnInit {
 
   async init() {
     this.dataSource.data = this.libraries;
-    this.dataSource.paginator = this.paginator;
+    setTimeout(() => this.dataSource.paginator = this.paginator);
   }
 
 }
