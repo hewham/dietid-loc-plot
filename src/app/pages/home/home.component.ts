@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit {
   findDistance() {
     // calculate library distance from map center
     for(let i in this.libraries) {
-      this.libraries[i].distance = this.locationService.findDistance(this.lat, this.lng, this.libraries[i].latitude, this.libraries[i].longitude);
+      this.libraries[i].distance = this.locationService.findDistance(this.currentLocation.lat, this.currentLocation.lng, this.libraries[i].latitude, this.libraries[i].longitude);
     }
     return;
   }
@@ -110,6 +110,8 @@ export class HomeComponent implements OnInit {
   }
 
   reload() {
+    this.lat = this.currentLocation.lat;
+    this.lng = this.currentLocation.lng;
     if(this.loadAll) {
       this.batchSize = 100;
       this.limitBatches = false;
