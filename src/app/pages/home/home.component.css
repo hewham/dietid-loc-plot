@@ -7,9 +7,9 @@ agm-map {
   position: relative;
   display: inline-block;
   width: 35%;
-  height: 45vh !important;
+  height: 50vh !important;
   margin: 20px;
-  padding-bottom: 35px;
+  /* padding-bottom: 35px; */
 }
 
 .info-container {

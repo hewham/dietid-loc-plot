@@ -1,6 +1,6 @@
 mat-table {
   overflow: auto;
-  max-height: calc(45vh - 30px) !important;
+  max-height: 50vh !important;
 }
 
 mat-paginator {

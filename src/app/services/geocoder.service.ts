@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 
-const MAPQUEST_BATCH_GEOCODE_URL = "http://open.mapquestapi.com/geocoding/v1/batch";
+const MAPQUEST_BATCH_GEOCODE_URL = "https://open.mapquestapi.com/geocoding/v1/batch";
 const MAPQUEST_API_KEY = "	1EjpsmaiCeRJPNyfpHon4xBv6BTZdQo6"; //hewham2
 // const MAPQUEST_API_KEY = "a9H3grKAooGzDscrWWSzKmIdExvgHkMm"; //hewham (expired)
 
