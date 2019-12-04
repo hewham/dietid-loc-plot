@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 
 //components
+import { LibraryListComponent } from './components/library-list/library-list.component';
 import { LibraryInfoComponent } from './components/library-info/library-info.component';
 
 //page components
@@ -19,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
+    LibraryListComponent,
     LibraryInfoComponent,
     HomeComponent
   ],

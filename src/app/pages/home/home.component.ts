@@ -1,5 +1,5 @@
 import { ViewChild, Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
+// import { MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
 
 import { ParseService } from '../../services/parse.service';
 import { GeocoderService } from '../../services/geocoder.service';
@@ -12,10 +12,10 @@ import { LocationService } from '../../services/location.service';
 })
 export class HomeComponent implements OnInit {
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  // @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>();
-  displayedColumns = [ 'library'];
+  // dataSource = new MatTableDataSource<any>();
+  // displayedColumns = [ 'library'];
 
   title = 'My first AGM project';
   lat = 38.5119;
@@ -42,8 +42,8 @@ export class HomeComponent implements OnInit {
     this.findDistance();
     this.sortByDistance();
     this.formatAddresses();
-    this.dataSource.data = this.libraries;
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.data = this.libraries;
+    // this.dataSource.paginator = this.paginator;
     this.isLoaded = true;
   }
 
@@ -89,6 +89,7 @@ export class HomeComponent implements OnInit {
   }
 
   onOpenLibrary(library) {
+    console.log("onOpenLibrary: ", library);
     this.selectedLibrary = library;
     this.lat = library.latitude;
     this.lng = library.longitude;

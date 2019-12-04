@@ -1,0 +1,11 @@
+mat-table {
+  overflow: auto;
+  max-height: calc(45vh - 30px) !important;
+}
+
+mat-paginator {
+  height: 30px;
+  position: absolute;
+  bottom: -30px;
+  right: 0;
+}
