@@ -1,9 +1,14 @@
-import { ViewChild, Component, OnInit } from '@angular/core';
-// import { MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
+import { Component, OnInit } from '@angular/core';
 
 import { ParseService } from '../../services/parse.service';
 import { GeocoderService } from '../../services/geocoder.service';
 import { LocationService } from '../../services/location.service';
+
+const DEFAULT_MAPQUEST_BATCH_SIZE = 10;
+const DEFAULT_LIMIT_MAPQUEST_BATCHES = true;
+
+const EXAMPLE_LAT = 38.5119;
+const EXAMPLE_LNG = -98.4842;
 
 @Component({
   selector: 'app-home',
@@ -12,17 +17,21 @@ import { LocationService } from '../../services/location.service';
 })
 export class HomeComponent implements OnInit {
 
-  // @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  // starting center of map
+  lat = EXAMPLE_LAT;
+  lng = EXAMPLE_LNG;
 
-  // dataSource = new MatTableDataSource<any>();
-  // displayedColumns = [ 'library'];
-
-  title = 'My first AGM project';
-  lat = 38.5119;
-  lng = -98.4842;
+  currentLocation = {
+    lat: EXAMPLE_LAT,
+    lng: EXAMPLE_LNG
+  }
 
   libraries: any = [];
   selectedLibrary: any = null;
+
+  loadAll = false;
+  batchSize: number = DEFAULT_MAPQUEST_BATCH_SIZE;
+  limitBatches: boolean = DEFAULT_LIMIT_MAPQUEST_BATCHES;
 
   isLoaded: boolean = false;
 
@@ -42,8 +51,6 @@ export class HomeComponent implements OnInit {
     this.findDistance();
     this.sortByDistance();
     this.formatAddresses();
-    // this.dataSource.data = this.libraries;
-    // this.dataSource.paginator = this.paginator;
     this.isLoaded = true;
   }
 
@@ -56,7 +63,7 @@ export class HomeComponent implements OnInit {
 
   addLatLngs() {
     return new Promise(async (resolve) => {
-      this.libraries = await this.geocoderService.addLatLngs(this.libraries);
+      this.libraries = await this.geocoderService.addLatLngs(this.libraries, this.batchSize, this.limitBatches);
       resolve();
     });
   }
@@ -78,21 +85,38 @@ export class HomeComponent implements OnInit {
   }
 
   formatAddresses() {
-    for(let i in this.libraries) {
-      let ad = "";
-      this.libraries[i].address ? ad += this.libraries[i].address + ", " : null ;
-      this.libraries[i].city ? ad += this.libraries[i].city + " " : null ;
-      this.libraries[i].state ? ad += this.libraries[i].state : null ;
-      this.libraries[i].zip ? ad += ", " + this.libraries[i].zip : null ;
-      this.libraries[i].formattedAddress = ad;
-    }
+    // make addresses standardizeds and readable
+    this.libraries = this.locationService.formatAddresses(this.libraries);
   }
 
   onOpenLibrary(library) {
-    console.log("onOpenLibrary: ", library);
     this.selectedLibrary = library;
+    this.updateActive(library);
     this.lat = library.latitude;
     this.lng = library.longitude;
+  }
+
+  updateActive(library){
+    for(let i in this.libraries) {
+      this.libraries[i].active = false;
+    }
+
+    this.libraries.map((el,i)=>{
+      if(el.latitude == library.latitude && el.longitude == library.longitude){
+        this.libraries[i].active = true;
+      }
+    })
+  }
+
+  reload() {
+    if(this.loadAll) {
+      this.batchSize = 100;
+      this.limitBatches = false;
+    } else {
+      this.batchSize = DEFAULT_MAPQUEST_BATCH_SIZE;
+      this.limitBatches = DEFAULT_LIMIT_MAPQUEST_BATCHES;
+    }
+    this.init();
   }
 
 }

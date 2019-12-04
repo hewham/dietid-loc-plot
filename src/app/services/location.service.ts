@@ -15,4 +15,16 @@ export class LocationService {
     return 12742 * Math.asin( Math.sqrt(a) ) * 0.62137119; // 2 * R; R = 6371 km; 0.62137119 Miles = 1 Km
   }
 
+  formatAddresses(libraries) {
+    for(let i in libraries) {
+      let ad = "";
+      libraries[i].address ? ad += libraries[i].address + ", " : null ;
+      libraries[i].city ? ad += libraries[i].city + " " : null ;
+      libraries[i].state ? ad += libraries[i].state : null ;
+      libraries[i].zip ? ad += ", " + libraries[i].zip : null ;
+      libraries[i].formattedAddress = ad;
+    }
+    return libraries;
+  }
+
 }

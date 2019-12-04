@@ -3,8 +3,7 @@ import { HttpService } from './http.service';
 
 const MAPQUEST_BATCH_GEOCODE_URL = "http://open.mapquestapi.com/geocoding/v1/batch";
 const MAPQUEST_API_KEY = "	1EjpsmaiCeRJPNyfpHon4xBv6BTZdQo6"; //hewham2
-// const MAPQUEST_API_KEY = "a9H3grKAooGzDscrWWSzKmIdExvgHkMm"; //hewham
-const MAPQUEST_BATCH_SIZE = 1;
+// const MAPQUEST_API_KEY = "a9H3grKAooGzDscrWWSzKmIdExvgHkMm"; //hewham (expired)
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +14,16 @@ export class GeocoderService {
     private httpService: HttpService
   ) {}
 
-  addLatLngs(locations) {
+  addLatLngs(locations, batchSize = 3, limitBatches = true) {
     // adds latitude and longitude to array of locations
     return new Promise(async (resolve) => {
-      let chunks = this.chunkArray(locations, MAPQUEST_BATCH_SIZE);
+      let chunks = this.chunkArray(locations, batchSize);
       let chunkedLocations = [];
       for(let chunk of chunks) {
-        chunkedLocations.push(await this.batchGeocode(chunk))
-        break; // limits to one request
+        chunkedLocations.push(await this.batchGeocode(chunk));
+        if(limitBatches) {
+          break; // limits to one request
+        }
       }
       resolve([].concat.apply([], chunkedLocations));
     })

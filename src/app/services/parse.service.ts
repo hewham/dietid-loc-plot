@@ -43,6 +43,7 @@ export class ParseService {
       obj[titles[i].toLowerCase()] = item[i];
     }
     obj['state'] = "KS";
+    obj['active'] = false;
     return obj;
   }
 

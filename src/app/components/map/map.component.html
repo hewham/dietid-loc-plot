@@ -1,0 +1,25 @@
+<agm-map 
+  [latitude]="lat" 
+  [longitude]="lng"
+  [zoom]="7">
+
+  <agm-marker 
+    *ngIf="currentLocation"
+    [latitude]="currentLocation.lat" 
+    [longitude]="currentLocation.lng"
+    [iconUrl]="greenMarker">
+    <agm-info-window>
+      <h3>Your Location</h3>
+    </agm-info-window>
+  </agm-marker>
+
+  <agm-marker 
+    *ngFor="let lib of libraries" 
+    [latitude]="lib.latitude" 
+    [longitude]="lib.longitude"
+    [iconUrl]="lib.active ? redMarker : blueMarker">
+    <agm-info-window>
+      <app-library-info [library]="lib"></app-library-info>
+    </agm-info-window>
+  </agm-marker>
+</agm-map>

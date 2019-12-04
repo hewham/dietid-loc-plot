@@ -19,3 +19,7 @@ agm-map {
   vertical-align:top;
   margin: 70px 20px 0 20px;
 }
+
+.right {
+  float: right;
+}

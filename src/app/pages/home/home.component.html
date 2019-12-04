@@ -1,17 +1,5 @@
 <div [hidden]="!isLoaded">
-  <agm-map 
-    [latitude]="lat" 
-    [longitude]="lng">
-
-    <agm-marker 
-      *ngFor="let lib of libraries" 
-      [latitude]="lib.latitude" 
-      [longitude]="lib.longitude">
-      <agm-info-window>
-        <app-library-info [library]="lib"></app-library-info>
-      </agm-info-window>
-    </agm-marker>
-  </agm-map>
+  <app-map [lat]="lat" [lng]="lng" [libraries]="libraries" [currentLocation]="currentLocation"></app-map>
 
   <div class="table-container" *ngIf="isLoaded">
     <app-library-list [libraries]="libraries" (onClick)="onOpenLibrary($event)"></app-library-list>
@@ -20,4 +8,16 @@
   <div class="info-container" *ngIf="selectedLibrary">
     <app-library-info [library]="selectedLibrary"></app-library-info>
   </div>
+
+
+
+  <div class="right">
+    <br/>
+    <br/>
+    Load All Libraries (404) <mat-checkbox [(ngModel)]="loadAll"></mat-checkbox>
+    <br/>
+    <br/>
+    <button class="right" mat-raised-button color="primary">Reload</button>
+  </div>
+
 </div>
