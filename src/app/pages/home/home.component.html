@@ -7,33 +7,15 @@
       *ngFor="let lib of libraries" 
       [latitude]="lib.latitude" 
       [longitude]="lib.longitude"
-      icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png">
+      [iconUrl]="'http://chart.apis.google.com/chartchst=d_map_pin_letter&chld=%E2%80%A2'">
       <agm-info-window>
-          <mat-card>
-              <mat-card-title>
-                {{ lib.library }}
-              </mat-card-title>
-              <mat-card-subtitle>
-                {{ lib.distance.toFixed(1) }} Miles Away
-              </mat-card-subtitle>
-              <mat-card-content>
-                {{ lib.formattedAddress }}
-              </mat-card-content>
-            </mat-card>
+        <app-library-info [library]="lib"></app-library-info>
       </agm-info-window>
     </agm-marker>
   </agm-map>
 
-  <!-- <div>
-    <div *ngFor="let lib of dataSource.data, let i = index">
-      <h4>{{ i + 1 }}) {{ lib.library }} ({{ lib.distance.toFixed(1) }} Miles Away)</h4>
-      <p>{{ lib.formattedAddress }}</p>
-    </div>
-  </div> -->
-  <!-- <h4>Libraries</h4> -->
-
   <div class="table-container">
-    <mat-table [dataSource]="dataSource" matSort>
+    <mat-table [dataSource]="dataSource" matSort> 
       <ng-container matColumnDef="library">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Libraries</mat-header-cell>
         <mat-cell *matCellDef="let library" (click)="onOpenLibrary(library)">
@@ -55,17 +37,7 @@
   </div>
 
   <div class="info-container" *ngIf="selectedLibrary">
-    <mat-card>
-      <mat-card-title>
-          {{ selectedLibrary.library }}
-      </mat-card-title>
-      <mat-card-subtitle>
-          {{ selectedLibrary.distance.toFixed(1) }} Miles Away
-      </mat-card-subtitle>
-      <mat-card-content>
-        {{ selectedLibrary.formattedAddress }}
-      </mat-card-content>
-    </mat-card>
+    <app-library-info [library]="selectedLibrary"></app-library-info>
   </div>
 
 </div>

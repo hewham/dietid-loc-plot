@@ -1,0 +1,11 @@
+<mat-card *ngIf="library">
+  <mat-card-title>
+    {{ library.library }}
+  </mat-card-title>
+  <mat-card-subtitle *ngIf="library.distance">
+    {{ library.distance.toFixed(1) }} Miles Away
+  </mat-card-subtitle>
+  <mat-card-content>
+    {{ library.formattedAddress }}
+  </mat-card-content>
+</mat-card>

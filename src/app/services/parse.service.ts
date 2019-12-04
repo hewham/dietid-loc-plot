@@ -13,7 +13,7 @@ export class ParseService {
   ) { }
 
   parseCSV(csvFile) {
-    // returns json from csv
+    // parses csv file using papaparse
     return new Promise<[any]>((resolve) => {
       this.papa.parse(csvFile, {
         download: true,

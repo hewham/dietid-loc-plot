@@ -4,7 +4,7 @@ import { HttpService } from './http.service';
 const MAPQUEST_BATCH_GEOCODE_URL = "http://open.mapquestapi.com/geocoding/v1/batch";
 const MAPQUEST_API_KEY = "	1EjpsmaiCeRJPNyfpHon4xBv6BTZdQo6"; //hewham2
 // const MAPQUEST_API_KEY = "a9H3grKAooGzDscrWWSzKmIdExvgHkMm"; //hewham
-const MAPQUEST_BATCH_SIZE = 2;
+const MAPQUEST_BATCH_SIZE = 1;
 
 @Injectable({
   providedIn: 'root'
