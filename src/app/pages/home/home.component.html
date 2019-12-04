@@ -1,3 +1,7 @@
+<div class="loading-img-container" *ngIf="!isLoaded">
+  <img class="loading-img" src="assets/imgs/loading.gif" />
+</div>
+
 <div [hidden]="!isLoaded">
   <app-map [lat]="lat" [lng]="lng" [libraries]="libraries" [currentLocation]="currentLocation"></app-map>
 
@@ -9,8 +13,6 @@
     <app-library-info [library]="selectedLibrary"></app-library-info>
   </div>
 
-
-
   <div class="right">
     <br/>
     <br/>
@@ -19,5 +21,4 @@
     <br/>
     <button class="right" mat-raised-button color="primary" (click)="reload()">Reload</button>
   </div>
-
 </div>
