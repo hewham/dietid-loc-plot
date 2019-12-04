@@ -4,7 +4,7 @@ import { ParseService } from '../../services/parse.service';
 import { GeocoderService } from '../../services/geocoder.service';
 import { LocationService } from '../../services/location.service';
 
-const DEFAULT_MAPQUEST_BATCH_SIZE = 2;
+const DEFAULT_MAPQUEST_BATCH_SIZE = 10;
 const DEFAULT_LIMIT_MAPQUEST_BATCHES = true;
 
 const EXAMPLE_LAT = 38.5119;
